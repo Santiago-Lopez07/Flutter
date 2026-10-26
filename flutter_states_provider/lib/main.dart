@@ -1,19 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_states_provider/pages/home_page.dart';
+import 'package:flutter_states_provider/pages/user_provider.dart';
 import 'package:flutter_states_provider/providers/counter_provider.dart';
 import 'package:provider/provider.dart';
 
-//void main() => runApp(const MyApp());
+// void main() => runApp(const MyApp());
+
 void main() {
   runApp(
-    //Crear una nueva instancia de la clase: CointerProvider que gestoina el estado
-    //Esta clase se guarda internamente en el arbol de widgets para que luego para queluego se pueda
-    //acceder por los widgets hijos usando: counter.watch
-    //Utilizar la  clase ChangeNotifierProvider para compartir el estado con los widgets del proyecto
+    // Crear una nueva instancia de la clase CounterProvider
+    // que gestiona el estado.
+    // Esta clase se guarda internamente en el árbol de widgets
+    // para que luego los widgets hijos puedan acceder a ella.
+    // Utilizar ChangeNotifierProvider para compartir el estado.
 
+    // MÉTODO ANTERIOR: ChangeNotifierProvider
+    /*
     ChangeNotifierProvider(
       create: (context) => CounterProvider(),
-      child: MyApp(),
+      child: const MyApp(),
+    ),
+    */
+
+    // MÉTODO NUEVO: MultiProvider
+    // Permite utilizar varios proveedores al mismo tiempo.
+    MultiProvider(
+      providers: [
+        // Proveedor del contador
+        ChangeNotifierProvider(create: (_) => CounterProvider()),
+
+        // Proveedor del usuario
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+      ],
+
+      // Widget principal de la aplicación
+      child: const MyApp(),
     ),
   );
 }
