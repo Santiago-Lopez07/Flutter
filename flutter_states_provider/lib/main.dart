@@ -1,27 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_states_provider/pages/home_page.dart';
-import 'package:flutter_states_provider/pages/user_provider.dart';
+import 'package:flutter_states_provider/providers/user_provider.dart';
 import 'package:flutter_states_provider/providers/counter_provider.dart';
+import 'package:flutter_states_provider/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 // void main() => runApp(const MyApp());
 
 void main() {
   runApp(
-    // Crear una nueva instancia de la clase CounterProvider
-    // que gestiona el estado.
-    // Esta clase se guarda internamente en el árbol de widgets
-    // para que luego los widgets hijos puedan acceder a ella.
-    // Utilizar ChangeNotifierProvider para compartir el estado.
-
-    // MÉTODO ANTERIOR: ChangeNotifierProvider
-    /*
-    ChangeNotifierProvider(
-      create: (context) => CounterProvider(),
-      child: const MyApp(),
-    ),
-    */
-
     // MÉTODO NUEVO: MultiProvider
     // Permite utilizar varios proveedores al mismo tiempo.
     MultiProvider(
@@ -31,6 +18,9 @@ void main() {
 
         // Proveedor del usuario
         ChangeNotifierProvider(create: (_) => UserProvider()),
+
+        // Proveedor del tema
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
 
       // Widget principal de la aplicación
@@ -44,10 +34,55 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Contador con el gestor/proveedor de estados: Provider',
-      theme: ThemeData(primarySwatch: Colors.amber, useMaterial3: false),
+
+      // TEMA CLARO
+      theme: ThemeData(
+        brightness: Brightness.light,
+        primarySwatch: Colors.amber,
+        scaffoldBackgroundColor: Colors.white,
+        useMaterial3: false,
+
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.amber,
+          foregroundColor: Colors.black,
+        ),
+
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.amber,
+            foregroundColor: Colors.black,
+          ),
+        ),
+      ),
+
+      // TEMA OSCURO
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.blueGrey,
+        scaffoldBackgroundColor: const Color(0xFF121212),
+        useMaterial3: false,
+
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFF263238),
+          foregroundColor: Colors.white,
+        ),
+
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF455A64),
+            foregroundColor: Colors.white,
+          ),
+        ),
+      ),
+
+      // Aplicar el tema seleccionado
+      themeMode: themeProvider.themeMode,
+
       home: const HomePage(),
     );
   }
