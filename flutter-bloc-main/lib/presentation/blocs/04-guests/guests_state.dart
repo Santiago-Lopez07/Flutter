@@ -28,8 +28,6 @@ class GuestsState extends Equatable {
       case GuestFilter.all:
         return guests;
 
-      default:
-        throw Exception('Filter value not valid');
     }
   }
   int get howManyFilteredGuests => filteredGuests.length;

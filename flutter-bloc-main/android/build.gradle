@@ -6,6 +6,18 @@ allprojects {
 }
 
 rootProject.buildDir = '../build'
+// geolocator_android 5.2.1 still defaults to Java 8. Compile its Java-only
+// Android module with the same supported bytecode target as this app.
+subprojects { subproject ->
+    if (subproject.name == 'geolocator_android') {
+        subproject.afterEvaluate {
+            subproject.android.compileOptions {
+                sourceCompatibility JavaVersion.VERSION_17
+                targetCompatibility JavaVersion.VERSION_17
+            }
+        }
+    }
+}
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
